@@ -34,9 +34,13 @@ public class ShadowCrafterBlockEntity extends BlockEntity implements NamedScreen
     }
 
     public void readNbt(NbtCompound nbt) {
-        NbtList list = nbt.getList("Ghosts");
+        // Prior to 1.21 the returned value was a direct list, newer versions
+        // wrap it in an Optional. Use an empty list when the tag is missing.
+        NbtList list = nbt.getList("Ghosts").orElseGet(NbtList::new);
         for (int i = 0; i < ghostSlots.size() && i < list.size(); i++) {
-            ghostSlots.set(i, ShadowItem.readNbt(list.getCompound(i)));
+            // Newer Yarn returns Optional<NbtCompound> for typed access.
+            NbtCompound tag = list.getCompound(i).orElseGet(NbtCompound::new);
+            ghostSlots.set(i, ShadowItem.readNbt(tag));
         }
     }
 
@@ -82,7 +86,7 @@ public class ShadowCrafterBlockEntity extends BlockEntity implements NamedScreen
     public ItemStack getStack(int slot) {
         ShadowItem si = ghostSlots.get(slot);
         if (si == ShadowItem.EMPTY) return ItemStack.EMPTY;
-        ItemStack stack = new ItemStack(si.item().value());
+        ItemStack stack = new ItemStack(si.item());
         stack.setCount(si.count());
         return stack;
     }
