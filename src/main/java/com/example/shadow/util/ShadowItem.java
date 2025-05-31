@@ -26,9 +26,12 @@ public record ShadowItem(Item item, int nbtHash, int count) {
     }
 
     public static ShadowItem readNbt(NbtCompound tag) {
-        String idString = tag.getString("id");
+        // Newer Minecraft versions return optionals from NbtCompound accessors.
+        String idString = tag.getString("id").orElse("");
         Identifier id = Identifier.tryParse(idString);
         Item i = id != null ? Registries.ITEM.get(id) : null;
-        return new ShadowItem(i, tag.getInt("h"), tag.getByte("c"));
+        int hash = tag.getInt("h").orElse(0);
+        byte count = tag.getByte("c").orElse((byte) 0);
+        return new ShadowItem(i, hash, count);
     }
 }

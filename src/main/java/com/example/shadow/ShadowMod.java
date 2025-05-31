@@ -14,6 +14,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.flag.FeatureFlags;
 
 public class ShadowMod implements ModInitializer {
     public static final String MOD_ID = "modid";
@@ -25,20 +26,20 @@ public class ShadowMod implements ModInitializer {
     @Override
     public void onInitialize() {
         SHADOW_CRAFTER_BLOCK = Registry.register(Registries.BLOCK,
-                new Identifier(MOD_ID, "shadow_crafter"),
+                Identifier.of(MOD_ID, "shadow_crafter"),
                 new ShadowCrafterBlock(Block.Settings.create()));
 
-        Registry.register(Registries.ITEM, new Identifier(MOD_ID, "shadow_crafter"),
+        Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "shadow_crafter"),
                 new BlockItem(SHADOW_CRAFTER_BLOCK, new Item.Settings()));
 
         SHADOW_CRAFTER_BE = Registry.register(Registries.BLOCK_ENTITY_TYPE,
-                new Identifier(MOD_ID, "shadow_crafter"),
+                Identifier.of(MOD_ID, "shadow_crafter"),
                 FabricBlockEntityTypeBuilder.create(ShadowCrafterBlockEntity::new, SHADOW_CRAFTER_BLOCK).build());
 
         SHADOW_CRAFTER_HANDLER = Registry.register(
                 Registries.SCREEN_HANDLER,
-                new Identifier(MOD_ID, "shadow_crafter"),
-                new ScreenHandlerType<>(ShadowCrafterScreenHandler::new));
+                Identifier.of(MOD_ID, "shadow_crafter"),
+                new ScreenHandlerType<>(ShadowCrafterScreenHandler::new, FeatureFlags.VANILLA_FEATURES));
 
         ShadowCommand.register();
     }
