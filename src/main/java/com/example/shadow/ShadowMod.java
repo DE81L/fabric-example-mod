@@ -6,7 +6,6 @@ import com.example.shadow.command.ShadowCommand;
 import com.example.shadow.screen.ShadowCrafterScreenHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
@@ -36,9 +35,10 @@ public class ShadowMod implements ModInitializer {
                 new Identifier(MOD_ID, "shadow_crafter"),
                 FabricBlockEntityTypeBuilder.create(ShadowCrafterBlockEntity::new, SHADOW_CRAFTER_BLOCK).build());
 
-        SHADOW_CRAFTER_HANDLER = ScreenHandlerRegistry.registerSimple(
+        SHADOW_CRAFTER_HANDLER = Registry.register(
+                Registries.SCREEN_HANDLER,
                 new Identifier(MOD_ID, "shadow_crafter"),
-                ShadowCrafterScreenHandler::new);
+                new ScreenHandlerType<>(ShadowCrafterScreenHandler::new));
 
         ShadowCommand.register();
     }

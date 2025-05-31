@@ -41,7 +41,8 @@ public class ShadowCommand {
     private static int dumpGhost(ServerCommandSource src) throws CommandSyntaxException {
         ShadowCrafterBlockEntity be = targetBlock(src.getPlayer());
         for (int i = 0; i < be.ghosts().size(); i++) {
-            src.sendFeedback(() -> Text.literal(i + ": " + be.ghosts().get(i).toString()), false);
+            final int index = i;
+            src.sendFeedback(() -> Text.literal(index + ": " + be.ghosts().get(index).toString()), false);
         }
         return 1;
     }

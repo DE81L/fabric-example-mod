@@ -4,6 +4,7 @@ import com.example.shadow.block.ShadowCrafterBlockEntity;
 import com.example.shadow.util.GhostSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 
@@ -23,5 +24,10 @@ public class ShadowCrafterScreenHandler extends ScreenHandler {
     @Override
     public boolean canUse(PlayerEntity player) {
         return true;
+    }
+
+    @Override
+    public ItemStack quickMove(PlayerEntity player, int index) {
+        return ItemStack.EMPTY;
     }
 }
