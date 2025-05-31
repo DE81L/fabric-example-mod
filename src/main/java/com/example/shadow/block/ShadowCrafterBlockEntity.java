@@ -10,7 +10,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
@@ -28,18 +27,17 @@ public class ShadowCrafterBlockEntity extends BlockEntity implements NamedScreen
     }
 
     // ---------- serialization ----------
-    @Override
     public void writeNbt(NbtCompound nbt) {
         NbtList list = new NbtList();
         for (ShadowItem si : ghostSlots) list.add(si.writeNbt());
         nbt.put("Ghosts", list);
     }
 
-    @Override
     public void readNbt(NbtCompound nbt) {
-        NbtList list = nbt.getList("Ghosts", NbtElement.COMPOUND_TYPE);
-        for (int i = 0; i < ghostSlots.size(); i++)
+        NbtList list = nbt.getList("Ghosts");
+        for (int i = 0; i < ghostSlots.size() && i < list.size(); i++) {
             ghostSlots.set(i, ShadowItem.readNbt(list.getCompound(i)));
+        }
     }
 
     // ---------- GUI ----------
