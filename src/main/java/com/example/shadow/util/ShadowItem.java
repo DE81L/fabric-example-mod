@@ -12,7 +12,7 @@ public record ShadowItem(Item item, int nbtHash, int count) {
     public static ShadowItem of(ItemStack stack) {
         return new ShadowItem(
                 stack.getItem(),
-                stack.hasNbt() ? stack.getNbt().hashCode() : 0,
+                0,
                 stack.getCount());
     }
 
@@ -26,7 +26,9 @@ public record ShadowItem(Item item, int nbtHash, int count) {
     }
 
     public static ShadowItem readNbt(NbtCompound tag) {
-        Item i = Registries.ITEM.get(new Identifier(tag.getString("id")));
+        String idString = tag.getString("id");
+        Identifier id = Identifier.tryParse(idString);
+        Item i = id != null ? Registries.ITEM.get(id) : null;
         return new ShadowItem(i, tag.getInt("h"), tag.getByte("c"));
     }
 }
